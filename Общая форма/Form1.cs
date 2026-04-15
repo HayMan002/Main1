@@ -40,7 +40,8 @@ namespace Общая_форма
 
         private void button2_Click(object sender, EventArgs e)
         {
-
+            Form3 f2 = new Form3();
+            f2.Show();
         }
 
         private void button3_Click(object sender, EventArgs e)
