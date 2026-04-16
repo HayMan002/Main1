@@ -10,13 +10,26 @@ using System.Windows.Forms;
 
 namespace Общая_форма
 {
+   
+
     public partial class Form1 : Form
     {
+        public static class GlobalData
+        {
+            public static int SelectedIndex = -1; // Наша глобальная переменная
+        }
+
         public Form1()
         {
             InitializeComponent();
+
+            comboBox1.SelectedIndex = GlobalData.SelectedIndex;
         }
 
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            GlobalData.SelectedIndex = comboBox1.SelectedIndex;
+        }
         private void label1_Click(object sender, EventArgs e)
         {
 
@@ -24,7 +37,7 @@ namespace Общая_форма
 
         private void button1_Click(object sender, EventArgs e)
         {
-
+             
         }
 
         private void button5_Click(object sender, EventArgs e)
