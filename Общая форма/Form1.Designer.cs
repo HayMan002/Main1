@@ -125,11 +125,11 @@
             this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Items.AddRange(new object[] {
-            "1) ",
-            "2)",
-            "3)",
+            "1) x^3-3x^2-24x-3=0",
+            "2) x^3+3x^2-2=0",
+            "3) 2x^3+9x^2-10=0",
             "4) x^3+3x^2-3,5=0"});
-            this.comboBox1.Location = new System.Drawing.Point(366, 97);
+            this.comboBox1.Location = new System.Drawing.Point(366, 88);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(380, 21);
             this.comboBox1.TabIndex = 8;
