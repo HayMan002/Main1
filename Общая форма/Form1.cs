@@ -16,7 +16,7 @@ namespace Общая_форма
     {
         public static class GlobalData
         {
-            public static int SelectedIndex = 0;
+            public static int SelectedIndex = -1;
         }
 
         public Form1()
