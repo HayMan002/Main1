@@ -16,32 +16,7 @@ namespace Общая_форма
     {
         public static class GlobalData
         {
-            public static int SelectedIndex = -1;
-        }
-
-        public class Function_x
-        {
-            Double FuncX(double x0)
-            {
-                double f;
-                switch(GlobalData.SelectedIndex)
-                {
-                    case 0:
-                        f = Math.Pow(x0, 3) -3*Math.Pow(x0,2) -24*x0 - 3;
-                        return f;
-                    case 1:
-                        f = Math.Pow(x0, 3) + 3 * Math.Pow(x0, 2) - 2;
-                        return f;
-                    case 2:
-                        f = 2 * Math.Pow(x0, 3) + 9 * Math.Pow(x0, 2) - 10;
-                        return f;
-                    case 3:
-                        f = Math.Pow(x0,3) + 3*Math.Pow(x0,2) - 3.5;
-                        return f;
-                    default:
-                        return 0;
-                }
-            }
+            public static int SelectedIndex = 0;
         }
 
         public Form1()
@@ -78,8 +53,11 @@ namespace Общая_форма
 
         private void button2_Click(object sender, EventArgs e)
         {
-            Form3 f2 = new Form3();
-            f2.Show();
+            // Сохраняем выбранный индекс функции в GlobalData
+            GlobalData.SelectedIndex = comboBox1.SelectedIndex;
+            Form3 f3 = new Form3();
+            f3.Show();
+            this.Hide();
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -90,6 +68,106 @@ namespace Общая_форма
         private void button4_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void comboBox1_SelectedIndexChanged_1(object sender, EventArgs e)
+        {
+
+        }
+        public class Function_x
+        {
+            // Сама функция f(x)
+            public double FuncX(double x0)
+            {
+                double f;
+                switch (GlobalData.SelectedIndex)
+                {
+                    case 0:
+                        f = Math.Pow(x0, 3) - 3 * Math.Pow(x0, 2) - 24 * x0 - 3;
+                        return f;
+                    case 1:
+                        f = Math.Pow(x0, 3) + 3 * Math.Pow(x0, 2) - 2;
+                        return f;
+                    case 2:
+                        f = 2 * Math.Pow(x0, 3) + 9 * Math.Pow(x0, 2) - 10;
+                        return f;
+                    case 3:
+                        f = Math.Pow(x0, 3) + 3 * Math.Pow(x0, 2) - 3.5;
+                        return f;
+                    default:
+                        return 0;
+                }
+            }
+
+            // Первая производная f'(x)
+            public double FuncX1(double x0)
+            {
+                switch (GlobalData.SelectedIndex)
+                {
+                    case 0:
+                        // f(x) = x³ - 3x² - 24x - 3 → f'(x) = 3x² - 6x - 24
+                        return 3 * Math.Pow(x0, 2) - 6 * x0 - 24;
+                    case 1:
+                        // f(x) = x³ + 3x² - 2 → f'(x) = 3x² + 6x
+                        return 3 * Math.Pow(x0, 2) + 6 * x0;
+                    case 2:
+                        // f(x) = 2x³ + 9x² - 10 → f'(x) = 6x² + 18x
+                        return 6 * Math.Pow(x0, 2) + 18 * x0;
+                    case 3:
+                        // f(x) = x³ + 3x² - 3.5 → f'(x) = 3x² + 6x
+                        return 3 * Math.Pow(x0, 2) + 6 * x0;
+                    default:
+                        return 0;
+                }
+            }
+
+            // Вторая производная f''(x)
+            public double FuncX2(double x0)
+            {
+                switch (GlobalData.SelectedIndex)
+                {
+                    case 0:
+                        // f'(x) = 3x² - 6x - 24 → f''(x) = 6x - 6
+                        return 6 * x0 - 6;
+                    case 1:
+                        // f'(x) = 3x² + 6x → f''(x) = 6x + 6
+                        return 6 * x0 + 6;
+                    case 2:
+                        // f'(x) = 6x² + 18x → f''(x) = 12x + 18
+                        return 12 * x0 + 18;
+                    case 3:
+                        // f'(x) = 3x² + 6x → f''(x) = 6x + 6
+                        return 6 * x0 + 6;
+                    default:
+                        return 0;
+                }
+            }
+
+            // Получить название функции для отображения
+            public string GetFunctionName()
+            {
+                switch (GlobalData.SelectedIndex)
+                {
+                    case 0: return "y = x³ - 3x² - 24x - 3";
+                    case 1: return "y = x³ + 3x² - 2";
+                    case 2: return "y = 2x³ + 9x² - 10";
+                    case 3: return "y = x³ + 3x² - 3.5";
+                    default: return "неизвестная функция";
+                }
+            }
+
+            // Получить формулу для отображения
+            public string GetFormula()
+            {
+                switch (GlobalData.SelectedIndex)
+                {
+                    case 0: return "F(x) = x³ - 3x² - 24x - 3";
+                    case 1: return "F(x) = x³ + 3x² - 2";
+                    case 2: return "F(x) = 2x³ + 9x² - 10";
+                    case 3: return "F(x) = x³ + 3x² - 3.5";
+                    default: return "F(x) = ?";
+                }
+            }
         }
     }
 }
