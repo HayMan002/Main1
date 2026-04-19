@@ -62,7 +62,9 @@ namespace Общая_форма
 
         private void button1_Click(object sender, EventArgs e)
         {
-             
+            this.Hide();
+             Form2 metodpopolam = new Form2();
+            metodpopolam.Show();
         }
 
         private void button5_Click(object sender, EventArgs e)
