@@ -64,7 +64,10 @@ namespace Общая_форма
 
         private void button3_Click(object sender, EventArgs e)
         {
-
+            GlobalData.SelectedIndex = comboBox1.SelectedIndex;
+            Form4 f4 = new Form4();
+            f4.Show();
+            this.Hide();
         }
 
         private void button4_Click(object sender, EventArgs e)
