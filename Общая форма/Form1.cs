@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace Общая_форма
 {
@@ -24,11 +25,14 @@ namespace Общая_форма
             InitializeComponent();
 
             comboBox1.SelectedIndex = GlobalData.SelectedIndex;
+
+            DrawGraph();
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             GlobalData.SelectedIndex = comboBox1.SelectedIndex;
+            DrawGraph();
         }
         private void label1_Click(object sender, EventArgs e)
         {
@@ -50,7 +54,121 @@ namespace Общая_форма
 
         private void button6_Click(object sender, EventArgs e)
         {
-            this.Close();
+            Application.Exit();
+        }
+
+        private void DrawGraph()
+        {
+            chart1.Series.Clear();
+            chart1.ChartAreas.Clear();
+            chart1.Titles.Clear();
+            chart1.Legends.Clear(); // убираем легенду полностью
+
+            // ── Область графика ───────────────────────────────────
+            ChartArea chartArea = new ChartArea("main");
+
+            // Ось X
+            chartArea.AxisX.Title = "X";
+            chartArea.AxisX.TitleFont = new Font("Arial", 8);
+            chartArea.AxisX.LabelStyle.Font = new Font("Arial", 7);
+            chartArea.AxisX.MajorGrid.LineColor = Color.LightGray;
+            chartArea.AxisX.MajorGrid.LineDashStyle = ChartDashStyle.Dash;
+            chartArea.AxisX.LineColor = Color.Black;
+            chartArea.AxisX.Crossing = 0;
+            chartArea.AxisX.Minimum = -10;
+            chartArea.AxisX.Maximum = 10;
+            chartArea.AxisX.Interval = 2;
+
+            // Ось Y
+            chartArea.AxisY.Title = "Y";
+            chartArea.AxisY.TitleFont = new Font("Arial", 8);
+            chartArea.AxisY.LabelStyle.Font = new Font("Arial", 7);
+            chartArea.AxisY.MajorGrid.LineColor = Color.LightGray;
+            chartArea.AxisY.MajorGrid.LineDashStyle = ChartDashStyle.Dash;
+            chartArea.AxisY.LineColor = Color.Black;
+            chartArea.AxisY.Crossing = 0;
+            chartArea.AxisY.Minimum = -10;  // ограничиваем диапазон
+            chartArea.AxisY.Maximum = 10;   // чтобы график не улетал
+            chartArea.AxisY.Interval = 2;
+
+            // Отступы внутри области графика
+            chartArea.InnerPlotPosition = new ElementPosition(8, 5, 88, 90);
+            chartArea.BackColor = Color.White;
+
+            chart1.ChartAreas.Add(chartArea);
+
+            // ── Серия графика функции ─────────────────────────────
+            Series series = new Series("f(x)");
+            series.ChartType = SeriesChartType.Line; // Line вместо Spline
+            series.Color = Color.SteelBlue;
+            series.BorderWidth = 2;
+            series.ChartArea = "main";
+            series.IsVisibleInLegend = false; // скрываем из легенды
+
+            // Заполнение точек с мелким шагом
+            double xMin = -10;
+            double xMax = 10;
+            double step = 0.02;
+            double prevY = double.NaN;
+
+            Function_x obj = new Function_x();
+
+            for (double x = xMin; x <= xMax; x += step)
+            {
+                try
+                {
+                    double y = obj.FuncX(x);
+
+                    // Если значение выходит за диапазон - разрываем линию
+                    if (y < -10 || y > 10)
+                    {
+                        series.Points.AddXY(x, DBNull.Value); // разрыв
+                        prevY = double.NaN;
+                        continue;
+                    }
+
+                    // Если слишком резкий скачок - разрываем линию
+                    if (!double.IsNaN(prevY) && Math.Abs(y - prevY) > 8)
+                    {
+                        series.Points.AddXY(x, DBNull.Value);
+                    }
+
+                    series.Points.AddXY(x, y);
+                    prevY = y;
+                }
+                catch
+                {
+                    series.Points.AddXY(x, DBNull.Value);
+                    prevY = double.NaN;
+                }
+            }
+
+            chart1.Series.Add(series);
+
+            // ── Ось Y=0 ───────────────────────────────────────────
+            Series zeroLine = new Series("zero");
+            zeroLine.ChartType = SeriesChartType.Line;
+            zeroLine.Color = Color.Black;
+            zeroLine.BorderWidth = 1;
+            zeroLine.ChartArea = "main";
+            zeroLine.IsVisibleInLegend = false;
+            zeroLine.Points.AddXY(-10, 0);
+            zeroLine.Points.AddXY(10, 0);
+            chart1.Series.Add(zeroLine);
+
+            // ── Заголовок (маленький, сверху) ────────────────────
+            Title title = new Title();
+            title.Text = obj.GetFunctionName();
+            title.Font = new Font("Arial", 8, FontStyle.Bold);
+            title.ForeColor = Color.DarkBlue;
+            title.Docking = Docking.Top;
+            chart1.Titles.Add(title);
+
+            // Фон
+            chart1.BackColor = Color.White;
+            chart1.BorderlineColor = Color.LightGray;
+            chart1.BorderlineDashStyle = ChartDashStyle.Solid;
+            chart1.BorderlineWidth = 1;
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -80,7 +198,8 @@ namespace Общая_форма
 
         private void comboBox1_SelectedIndexChanged_1(object sender, EventArgs e)
         {
-
+            GlobalData.SelectedIndex = comboBox1.SelectedIndex;
+            DrawGraph();
         }
         public class Function_x
         {
